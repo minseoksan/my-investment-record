@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minseok's Investment Journal</title>
+</head>
+<body>
+
+    <header>
+        <h1>📈 Minseok's Investment Journal</h1>
+        <p>시장 속에서 배우고 기록하며 나만의 투자 원칙을 세워가는 공간</p>
+        
+        <div style="background-color: #f0f4f8; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h3>📊 투자 현황 요약</h3>
+            <span style="margin-right: 20px;"><strong>보유 종목 수:</strong> 2개</span>
+            <span style="margin-right: 20px;"><strong>목표 연수익률:</strong> 공격적 수익률 지향</span>
+            <span><strong>최근 업데이트:</strong> 2026-07-16</span>
+        </div>
+        
+        <nav>
+            <a href="#portfolio">보유 및 관심 종목</a> | 
+            <a href="#journal">매매 일지 & 교훈</a> |
+            <a href="#rules">나의 투자 원칙</a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <section id="portfolio">
+        <h2>🔍 보유 및 관심 종목 분석</h2>
+        <table border="1" style="border-collapse: collapse; width: 100%; text-align: left;">
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th style="padding: 8px;">종목명</th>
+                    <th style="padding: 8px;">매수/관심가</th>
+                    <th style="padding: 8px;">목표가</th>
+                    <th style="padding: 8px;">매출액/영업이익</th>
+                    <th style="padding: 8px;">PER/PBR</th>
+                    <th style="padding: 8px;">핵심 투자 이유 (아이디어)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 8px;"><strong>HBM 관련주 A (예시)</strong></td>
+                    <td style="padding: 8px;">52,000원</td>
+                    <td style="padding: 8px;">75,000원</td>
+                    <td style="padding: 8px;">1,200억 / 180억</td>
+                    <td style="padding: 8px;">12.4 / 1.8</td>
+                    <td style="padding: 8px;">DRAM 세대교체에 따른 전용 테스트 장비 독점 공급 가능성 고조</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;"><strong>온디바이스 AI 관련주 B (예시)</strong></td>
+                    <td style="padding: 8px;">34,500원</td>
+                    <td style="padding: 8px;">50,000원</td>
+                    <td style="padding: 8px;">850억 / 95억</td>
+                    <td style="padding: 8px;">18.2 / 2.1</td>
+                    <td style="padding: 8px;">스마트폰 및 IT 기기 내 탑재율 증가로 인한 NPU 설계 IP 수요 증가</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <hr>
+
+    <section id="journal">
+        <h2>📝 매매 일지 & 투자 교훈 복기</h2>
+        <p>매매 과정에서의 판단과 실수를 기록하여 뇌동매매를 방지합니다.</p>
+        
+        <div style="background-color: #f9f9f9; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd;">
+            <h3>새로운 투자 일지 기록</h3>
+            <form id="journal-form">
+                <label>구분: </label>
+                <select style="margin-bottom: 10px;">
+                    <option value="buy">📥 매수 기록</option>
+                    <option value="sell">📤 매도 기록</option>
+                    <option value="lesson">💡 투자 교훈 / 오답 노트</option>
+                </select>
+                <br>
+                <input type="text" placeholder="종목명 (예: 삼성전자, 혹은 시장 일지)" style="width: 50%; margin-bottom: 5px;"><br>
+                <textarea placeholder="판단 근거, 잘한 점, 혹은 이번 매매를 통해 얻은 교훈을 적어주세요." rows="4" style="width: 100%; margin-bottom: 5px;"></textarea><br>
+                <button type="button">일지 저장하기</button>
+            </form>
+        </div>
+
+        <div class="journal-list">
+            <div style="border-left: 4px solid #f44336; padding-left: 15px; margin-bottom: 15px;">
+                <span style="background-color: #ffebee; color: #c62828; padding: 2px 5px; font-size: 0.8rem; font-weight: bold;">💡 투자 교훈</span>
+                <h4>분할 매수 원칙 미준수 반성</h4>
+                <p>호재 뉴스를 보고 급하게 일시 매수했다가 단기 조정에 심리적으로 흔들림. 무조건 3회 이상 분할 매입 규칙을 지킬 것.</p>
+                <small style="color: #666;">기록일: 2026-07-16</small>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+
+    <section id="rules" style="margin-bottom: 50px;">
+        <h2>🛡️ 나의 매수 전 체크리스트</h2>
+        <ul>
+            <li><input type="checkbox"> 매수하려는 기업의 분기 영업이익 적자 여부를 확인했는가?</li>
+            <li><input type="checkbox"> 현재 주가가 최근 6개월간 너무 급등한 상태는 아닌가? (이격도 확인)</li>
+            <li><input type="checkbox"> 일시 불매수가 아닌 분할 매수 시나리오를 세웠는가?</li>
+            <li><input type="checkbox"> 이 종목의 손절선과 목표가를 명확히 설정했는가?</li>
+        </ul>
+    </section>
+
+</body>
+</html>
