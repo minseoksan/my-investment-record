@@ -1,0 +1,267 @@
+/* 1. 구글 폰트 적용 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+/* 2. 전역 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+body {
+    background-color: #f1f5f9; /* 트렌디한 핀테크 서비스 느낌의 밝은 배경색 */
+    color: #334155;
+    line-height: 1.6;
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #e2e8f0;
+    margin: 40px 0;
+}
+
+/* 3. 헤더 및 대시보드 요약 섹션 */
+header {
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+header .subtitle {
+    color: #64748b;
+    font-size: 1rem;
+    margin-bottom: 24px;
+}
+
+/* 📊 대시보드 요약 상자 (Flexbox 레이아웃 활용) */
+.dashboard-summary {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+    margin-bottom: 24px;
+}
+
+.dashboard-summary h3 {
+    font-size: 1.1rem;
+    color: #1e293b;
+    margin-bottom: 16px;
+}
+
+.summary-cards {
+    display: flex; /* 요소를 가로로 나란히 정렬 */
+    flex-wrap: wrap; /* 화면이 좁아지면 자연스럽게 아래 줄로 줄 바꿈 */
+    gap: 20px; /* 요소들 사이의 간격 */
+}
+
+.summary-cards span {
+    background-color: #f8fafc;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid #f1f5f9;
+    font-size: 0.95rem;
+}
+
+/* 상단 내비게이션 바 */
+nav {
+    display: flex;
+    gap: 15px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #475569;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s; /* 마우스를 올릴 때 부드러운 변화 */
+}
+
+nav a:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+/* 4. 테이블(보유 및 관심 종목) 스타일링 */
+h2 {
+    font-size: 1.4rem;
+    color: #1e293b;
+    margin-bottom: 16px;
+}
+
+.table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden; /* 테두리 둥글기가 깔끔하게 적용되도록 설정 */
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th, td {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+}
+
+th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+td {
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+
+tr:last-child td {
+    border-bottom: none; /* 마지막 행은 선 생략 */
+}
+
+/* 5. 매매 일지 작성 및 카드 섹션 */
+.section-desc {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.journal-write-box {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+}
+
+.journal-write-box h3 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+select, input[type="text"], textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+select:focus, input[type="text"]:focus, textarea:focus {
+    border-color: #3b82f6; /* 클릭 시 파란색 강조선 */
+}
+
+button {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #2563eb; /* 마우스 오버 시 좀 더 어두운 파란색 */
+}
+
+/* 일지 아이템 (카드 형태) */
+.journal-item {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 5px solid #ef4444; /* 왼쪽 강조 선 */
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+    margin-bottom: 16px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.badge.red {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+.journal-item h4 {
+    margin-bottom: 6px;
+    color: #1e293b;
+}
+
+.journal-item p {
+    font-size: 0.95rem;
+    color: #475569;
+    margin-bottom: 10px;
+}
+
+.date {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+/* 6. 체크리스트 섹션 */
+.checklist {
+    list-style: none;
+}
+
+.checklist li {
+    background-color: #ffffff;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+}
+
+.checklist li label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.checklist input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
