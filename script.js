@@ -1,6 +1,11 @@
 // 1. HTML 요소 가져오기
 const journalForm = document.getElementById('journal-form');
 const journalList = document.querySelector('.journal-list');
+const journals = [];
+
+function renderJournals(){
+    journalList.innerHTML = "";
+}
 
 // 2. 이벤트 리스너 등록
 journalForm.addEventListener('submit', function(event) {
@@ -28,34 +33,26 @@ journalForm.addEventListener('submit', function(event) {
 
     const title = document.getElementById('titleInput').value;
     const content = document.getElementById('contentInput').value;
-
-    // [방어 코드] 텅 빈 입력 방지
-    if (!title.trim() || !content.trim()) {
-        alert('종목명과 내용을 모두 입력해 주세요!');
-        return;
-    }
-
-    // 4. 새로운 일지 카드 <div> 생성
-    const newCard = document.createElement('div');
-    newCard.classList.add('journal-item');
-    newCard.style.borderLeft = `5px solid ${borderColor}`; // 왼쪽 테두리 색상 동적 적용
-
-    // 오늘의 날짜 생성 (2026-07-20 형식)
     const today = new Date().toISOString().split('T')[0];
 
-    // 5. 카드 내부 HTML 채우기
-    newCard.innerHTML = `
-        <span class="badge ${badgeClass}">${typeText}</span>
-        <h4>${title}</h4>
-        <p>${content}</p>
-        <small class="date">기록일: ${today}</small>
-    `;
+    const journal = {
+    type: typeValue,
+    title: title,
+    content: content,
+    date: today
+};
 
-    // 6. 리스트의 맨 위에 카드 추가
-    journalList.prepend(newCard);
+    if (!title.trim() || !content.trim()) {
+    alert('종목명과 내용을 모두 입력해 주세요!');
+    return;
+}
+    journals.unshift(journal);
 
     // 7. 입력창 비우기
     journalForm.reset();
+
+    //renderJournals(); 
+    // git에 올리기 위해 임시 주석처리
 });
 
 
