@@ -91,12 +91,7 @@
         </div>
 
         <div class="journal-list">
-            <div class="journal-item danger">
-                <span class="badge red">💡 투자 교훈</span>
-                <h4>분할 매수 원칙 미준수 반성</h4>
-                <p>호재 뉴스를 보고 급하게 일시 매수했다가 단기 조정에 심리적으로 흔들림. 무조건 3회 이상 분할 매입 규칙을 지킬 것.</p>
-                <small class="date">기록일: 2026-07-16</small>
-            </div>
+
         </div>
     </section>
 
@@ -111,6 +106,52 @@
             <li><label><input type="checkbox"> 이 종목의 손절선과 목표가를 명확히 설정했는가?</label></li>
         </ul>
     </section>
-    <script src="script.js"></script>
+    
+    <!-- ========================= -->
+    <!-- 매수 전 체크리스트 모달 -->
+    <!-- ========================= -->
+
+    <div id="buy-checklist-modal" class="modal-overlay">
+
+    <div class="modal-content">
+
+        <h2>🛡️ 매수 전 체크리스트</h2>
+
+        <p>모든 항목을 확인한 후 저장할 수 있습니다.</p>
+
+        <label>
+            <input type="checkbox" class="buy-modal-check">
+            영업이익 적자 여부를 확인
+        </label>
+
+        <label>
+            <input type="checkbox" class="buy-modal-check">
+            최근 6개월 급등 여부를 확인
+        </label>
+
+        <label>
+            <input type="checkbox" class="buy-modal-check">
+            분할 매수 계획을 설립
+        </label>
+
+        <label>
+            <input type="checkbox" class="buy-modal-check">
+            손절가와 목표가를 설정 완료
+        </label>
+
+        <div class="modal-buttons">
+
+            <button type="button" id="cancel-modal">
+                취소
+            </button>
+
+            <button type="button" id="confirm-save">
+                저장
+            </button>
+
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
 </body>
 </html>

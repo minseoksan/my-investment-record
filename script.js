@@ -1,63 +1,124 @@
-// 1. HTML 요소 가져오기
+// HTML 요소 가져오기
 const journalForm = document.getElementById('journal-form');
 const journalList = document.querySelector('.journal-list');
-const journals = [];
+const typeSelect = journalForm.querySelector("select");
+const buyChecklistModal = document.getElementById("checklist-modal");
+const modalCheckboxes = buyChecklistModal.querySelectorAll(".buy-modal-check");
+const cancelModalBtn = document.getElementById("cancel-modal");
+const confirmSaveBtn = document.getElementById("confirm-save");
+const journals = JSON.parse(localStorage.getItem("journals")) || [];
 
-function renderJournals(){
+//  화면에 기록 목록을 렌더링하는 함수
+function renderJournals() {
     journalList.innerHTML = "";
+
+    journals.forEach(function(journal) {
+
+        const newCard = document.createElement("div");
+
+        let badgeText = "💡 투자 교훈";
+        let badgeClass = "red";
+        let borderClass = "danger";
+
+        if (journal.type === "buy") {
+            badgeText = "📥 매수 기록";
+            badgeClass = "blue";
+            borderClass = "buy";
+        } else if (journal.type === "sell") {
+            badgeText = "📤 매도 기록";
+            badgeClass = "green";
+            borderClass = "sell";
+        }
+
+        newCard.className = `journal-item ${borderClass}`;
+
+        newCard.innerHTML = `
+            <span class="badge ${badgeClass}">${badgeText}</span>
+            <h4>${journal.title}</h4>
+            <p>${journal.content}</p>
+            <small class="date">기록일: ${journal.date}</small>
+        `;
+
+        journalList.appendChild(newCard);
+    });
 }
 
-// 2. 이벤트 리스너 등록
-journalForm.addEventListener('submit', function(event) {
-    // 💡 브라우저의 기본 새로고침을 무조건 최상단에서 막아줍니다.
-    event.preventDefault(); 
-
-    // 3. 입력값 가져오기
-    const typeSelect = journalForm.querySelector('select');
+// 저장 버튼 클릭 시 처리
+function saveJournal(){
     const typeValue = typeSelect.value; // 'buy', 'sell', 'lesson'
-    
-    // 에러 발생 확률이 높은 복잡한 코드 대신, 직관적인 조건문으로 한글 텍스트와 뱃지 색상을 정합니다.
-    let typeText = '💡 투자 교훈';
-    let badgeClass = 'red';
-    let borderColor = '#ef4444'; // 기본값 (교훈 - 빨간색)
-
-    if (typeValue === 'buy') {
-        typeText = '📥 매수 기록';
-        badgeClass = 'blue';
-        borderColor = '#3b82f6'; // 파란색
-    } else if (typeValue === 'sell') {
-        typeText = '📤 매도 기록';
-        badgeClass = 'green';
-        borderColor = '#22c55e'; // 초록색
-    }
-
     const title = document.getElementById('titleInput').value;
     const content = document.getElementById('contentInput').value;
     const today = new Date().toISOString().split('T')[0];
-
     const journal = {
     type: typeValue,
     title: title,
     content: content,
     date: today
-};
+    };
 
     if (!title.trim() || !content.trim()) {
     alert('종목명과 내용을 모두 입력해 주세요!');
     return;
-}
+    }
     journals.unshift(journal);
 
-    // 7. 입력창 비우기
+    // Local Storage 저장
+    localStorage.setItem("journals", JSON.stringify(journals));
+
+    buyChecklistModal.style.display = "none";
+    // 화면 다시 그리기
+    renderJournals();
+
+    // 입력창 초기화
     journalForm.reset();
 
-    //renderJournals(); 
-    // git에 올리기 위해 임시 주석처리
+    modalCheckboxes.forEach(function(checkbox) {
+        checkbox.checked = false;
+    });
+
+
+}
+
+// 이벤트 리스너 등록
+journalForm.addEventListener('submit', function(event) {
+    // 💡 브라우저의 기본 새로고침을 무조건 최상단에서 막아줍니다.
+    event.preventDefault();
+    const typeValue = typeSelect.value;
+    if (typeValue === "buy") {
+        buyChecklistModal.style.display = "flex";
+    }
+    else if (typeValue === "sell") {
+        saveJournal();
+    }
+    else if (typeValue === "lesson") {
+        saveJournal();
+    }
+    
+
 });
+
+cancelModalBtn.addEventListener("click", function(){
+
+    buyChecklistModal.style.display = "none";
+
+});
+
+
+confirmSaveBtn.addEventListener("click", function(){
+    const allChecked = [...modalCheckboxes].every(function(checkbox) {
+        return checkbox.checked;
+    });
+    if (allChecked) {
+        saveJournal();
+    } else {
+        alert("모든 체크리스트 항목을 확인해주세요.");
+    }
+})
 
 
 // --- 🩺 [최종 치트키 버전] 체크리스트 기능 ---
 
+renderJournals();
 // HTML의 클래스명(.rule-list)을 따지지 않고, 웹페이지에 존재하는 모든 체크박스를 싹 다 잡아옵니다.
 const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
 
