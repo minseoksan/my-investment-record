@@ -1,14 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // 1. HTML 요소 가져오기 (가져오지 못할 경우를 대비해 안전하게 처리)
+    // 1. HTML 요소 가져오기
     const journalForm = document.getElementById('journal-form');
     const journalList = document.querySelector('.journal-list');
     const typeSelect = journalForm ? journalForm.querySelector("select") : null;
 
     const buyChecklistModal = document.getElementById("buy-checklist-modal");
-    const modalCheckboxes = buyChecklistModal ? buyChecklistModal.querySelectorAll(".buy-modal-check") : [];
+    const buyModalCheckboxes = buyChecklistModal ? buyChecklistModal.querySelectorAll(".buy-modal-check") : [];
+    const cancelBuyModalBtn = document.getElementById("cancel-buy-modal");
+    const confirmBuySaveBtn = document.getElementById("confirm-buy-save");
 
-    const cancelModalBtn = document.getElementById("cancel-modal");
-    const confirmSaveBtn = document.getElementById("confirm-save");
+    const sellChecklistModal = document.getElementById("sell-checklist-modal");
+    const sellModalCheckboxes = sellChecklistModal ? sellChecklistModal.querySelectorAll(".sell-modal-check") : [];
+    const cancelSellModalBtn = document.getElementById("cancel-sell-modal");
+    const confirmSellSaveBtn = document.getElementById("confirm-sell-save");
 
     const journals = JSON.parse(localStorage.getItem("journals")) || [];
 
@@ -21,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const newCard = document.createElement("div");
 
             let badgeText = "💡 투자 교훈";
-            let badgeClass = "red";
+            let badgeClass = "green";
             let borderClass = "danger";
 
             if (journal.type === "buy") {
@@ -30,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 borderClass = "buy";
             } else if (journal.type === "sell") {
                 badgeText = "📤 매도 기록";
-                badgeClass = "green";
+                badgeClass = "red";
                 borderClass = "sell";
             }
 
@@ -42,8 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 <small class="date">기록일: ${journal.date}</small>
                 <button class="delete-btn">삭제</button>
             `;
-            const deleteBtn = newCard.querySelector(".delete-btn");
 
+            const deleteBtn = newCard.querySelector(".delete-btn");
             deleteBtn.addEventListener("click", function () {
                 deleteJournal(index);
             });
@@ -79,37 +83,37 @@ document.addEventListener("DOMContentLoaded", function () {
         journals.unshift(journal);
         localStorage.setItem("journals", JSON.stringify(journals));
 
-        if (buyChecklistModal) {
-            buyChecklistModal.style.display = "none";
-        }
+        // 모달 닫기 (독립적 처리)
+        if (buyChecklistModal) buyChecklistModal.style.display = "none";
+        if (sellChecklistModal) sellChecklistModal.style.display = "none";
 
         renderJournals();
 
         if (journalForm) journalForm.reset();
 
-        modalCheckboxes.forEach(function (checkbox) {
-            checkbox.checked = false;
-        });
+        // 체크박스 초기화
+        buyModalCheckboxes.forEach(cb => cb.checked = false);
+        sellModalCheckboxes.forEach(cb => cb.checked = false);
     }
 
     // 4. 일지 삭제 함수
     function deleteJournal(index) {
         const isDelete = confirm("정말 삭제하시겠습니까?");
-        if (!isDelete) {
-            return;
-        }    
+        if (!isDelete) return;
+        
         journals.splice(index, 1);
         localStorage.setItem("journals", JSON.stringify(journals));
         renderJournals();
     }
 
-    // 4. 폼 제출(Submit) 이벤트 연결
+    // 5. 폼 제출(Submit) 이벤트 연결
     if (journalForm) {
         journalForm.addEventListener('submit', function (event) {
             event.preventDefault();
 
             const titleInput = document.getElementById('titleInput');
             const contentInput = document.getElementById('contentInput');
+
             if (titleInput && contentInput && (!titleInput.value.trim() || !contentInput.value.trim())) {
                 alert('종목명과 내용을 모두 입력해 주세요!');
                 return;
@@ -118,29 +122,25 @@ document.addEventListener("DOMContentLoaded", function () {
             const typeValue = typeSelect ? typeSelect.value : '';
             if (typeValue === "buy") {
                 if (buyChecklistModal) buyChecklistModal.style.display = "flex";
+            } else if (typeValue === "sell") {
+                if (sellChecklistModal) sellChecklistModal.style.display = "flex";
             } else {
                 saveJournal();
             }
         });
-    } else {
-        console.error("오류: #journal-form 요소를 찾을 수 없습니다.");
     }
 
-    // 5. [취소] 버튼 이벤트 연결
-    if (cancelModalBtn) {
-        cancelModalBtn.addEventListener("click", function () {
+    // 6. 매수 모달 버튼 이벤트
+    if (cancelBuyModalBtn) {
+        cancelBuyModalBtn.addEventListener("click", function () {
             if (buyChecklistModal) buyChecklistModal.style.display = "none";
         });
-    } else {
-        console.error("오류: #cancel-modal 요소를 찾을 수 없습니다.");
     }
 
-    // 6. [저장] 버튼 이벤트 연결
-    if (confirmSaveBtn) {
-        confirmSaveBtn.addEventListener("click", function () {
-            const allChecked = Array.from(modalCheckboxes).every(function (checkbox) {
-                return checkbox.checked;
-            });
+    if (confirmBuySaveBtn) {
+        confirmBuySaveBtn.addEventListener("click", function () {
+            // modalCheckboxes 오타를 buyModalCheckboxes로 수정
+            const allChecked = Array.from(buyModalCheckboxes).every(checkbox => checkbox.checked);
 
             if (allChecked) {
                 saveJournal();
@@ -148,14 +148,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("모든 체크리스트 항목을 확인해주세요.");
             }
         });
-    } else {
-        console.error("오류: #confirm-save 요소를 찾을 수 없습니다.");
     }
 
-    // 7. 초기 렌더링 실행
+    // 7. 매도 모달 버튼 이벤트
+    if (cancelSellModalBtn) {
+        cancelSellModalBtn.addEventListener("click", function () {
+            if (sellChecklistModal) sellChecklistModal.style.display = "none";
+        });
+    }
+
+    if (confirmSellSaveBtn) {
+        confirmSellSaveBtn.addEventListener("click", function () {
+            const allChecked = Array.from(sellModalCheckboxes).every(checkbox => checkbox.checked);
+
+            if (allChecked) {
+                saveJournal();
+            } else {
+                alert("모든 체크리스트 항목을 확인해주세요.");
+            }
+        });
+    }
+
+    // 8. 초기 렌더링
     renderJournals();
 
-    // 8. 체크리스트 취소선 기능
+    // 9. 체크리스트 취소선 기능
     const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
     allCheckboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', function () {
