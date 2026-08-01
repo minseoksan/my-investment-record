@@ -310,8 +310,7 @@ button:hover {
 /* ========================= */
 /* 체크리스트 모달 (공통) */
 /* ========================= */
-.buy-modal-overlay,
-.sell-modal-overlay {
+.modal-overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -324,8 +323,7 @@ button:hover {
     z-index: 1000;
 }
 
-.buy-modal-content,
-.sell-modal-content {
+.modal-content {
     background: white;
     width: 450px;
     padding: 30px;
@@ -336,8 +334,7 @@ button:hover {
     gap: 15px;
 }
 
-.buy-modal-content label,
-.sell-modal-content label {
+.modal-content label {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -345,8 +342,7 @@ button:hover {
     font-size: 0.95rem;
 }
 
-.buy-modal-buttons,
-.sell-modal-buttons {
+.modal-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
@@ -354,13 +350,11 @@ button:hover {
 }
 
 /* 모달 취소 버튼 전용 색상 */
-#cancel-buy-modal,
-#cancel-sell-modal {
+#cancel-modal {
     background-color: #e2e8f0;
     color: #475569;
 }
 
-#cancel-buy-modal:hover,
-#cancel-sell-modal:hover {
+#cancel-modal:hover {
     background-color: #cbd5e1;
 }

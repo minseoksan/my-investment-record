@@ -4,15 +4,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const journalList = document.querySelector('.journal-list');
     const typeSelect = journalForm ? journalForm.querySelector("select") : null;
 
-    const buyChecklistModal = document.getElementById("buy-checklist-modal");
-    const buyModalCheckboxes = buyChecklistModal ? buyChecklistModal.querySelectorAll(".buy-modal-check") : [];
-    const cancelBuyModalBtn = document.getElementById("cancel-buy-modal");
-    const confirmBuySaveBtn = document.getElementById("confirm-buy-save");
+    const Checklistmodal = document.getElementById("checklist-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalChecklist = document.getElementById("modal-checklist");
+    const cancelModalBtn = document.getElementById("cancel-modal");
+    const confirmSaveBtn = document.getElementById("confirm-save");
 
-    const sellChecklistModal = document.getElementById("sell-checklist-modal");
-    const sellModalCheckboxes = sellChecklistModal ? sellChecklistModal.querySelectorAll(".sell-modal-check") : [];
-    const cancelSellModalBtn = document.getElementById("cancel-sell-modal");
-    const confirmSellSaveBtn = document.getElementById("confirm-sell-save");
+    const checklistData = {
+    buy: [
+        "영업이익 적자 여부를 확인",
+        "최근 6개월 급등 여부를 확인",
+        "분할 매수 계획을 수립",
+        "손절가와 목표가를 설정"
+    ],
+    sell: [
+        "목표가 달성 여부를 확인",
+        "손절가 도달 여부를 확인",
+        "분할 매도 계획을 수립",
+        "매도 이유를 다시 점검"
+    ],
+    lesson: [
+        "왜 실패했는지 분석했다",
+        "감정적인 매매였는지 확인했다",
+        "다음 대응 전략을 정리했다",
+        "투자 원칙을 수정했다"
+    ]
+    };
 
     const journals = JSON.parse(localStorage.getItem("journals")) || [];
 
@@ -84,16 +101,15 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("journals", JSON.stringify(journals));
 
         // 모달 닫기 (독립적 처리)
-        if (buyChecklistModal) buyChecklistModal.style.display = "none";
-        if (sellChecklistModal) sellChecklistModal.style.display = "none";
+        if (Checklistmodal) Checklistmodal.style.display = "none";
 
         renderJournals();
 
         if (journalForm) journalForm.reset();
 
         // 체크박스 초기화
-        buyModalCheckboxes.forEach(cb => cb.checked = false);
-        sellModalCheckboxes.forEach(cb => cb.checked = false);
+        const modalCheckboxes = modalChecklist.querySelectorAll(".modal-check");
+        modalCheckboxes.forEach(cb => {cb.checked = false;});
     }
 
     // 4. 일지 삭제 함수
@@ -106,7 +122,43 @@ document.addEventListener("DOMContentLoaded", function () {
         renderJournals();
     }
 
-    // 5. 폼 제출(Submit) 이벤트 연결
+    // 5. 체크리스트 모달 생성
+    function openModal(type) {
+        modalChecklist.innerHTML = "";
+        if (type === "buy") {
+            modalTitle.textContent = "🛡️ 매수 체크리스트";
+        } else if (type === "sell") {
+            modalTitle.textContent = "📤 매도 체크리스트";
+        } else if (type === "lesson") {
+            modalTitle.textContent = "💡 투자 교훈 체크리스트";
+        }
+
+        const items = checklistData[type];
+
+        items.forEach(function(item) {
+            const label = document.createElement("label");
+            const checkbox = document.createElement("input");
+            checkbox.addEventListener("change", function () {
+                if (checkbox.checked) {
+                    label.style.textDecoration = "line-through";
+                    label.style.color = "#94a3b8";
+                } else {
+                    label.style.textDecoration = "none";
+                    label.style.color = "";
+                }
+            });
+
+            checkbox.type = "checkbox";
+            checkbox.className = "modal-check";
+            label.appendChild(checkbox);
+            label.append(" " + item);
+            modalChecklist.appendChild(label);
+        });
+    
+    Checklistmodal.style.display = "flex";
+    }
+
+    // 6. 폼 제출(Submit) 이벤트 연결
     if (journalForm) {
         journalForm.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -120,47 +172,21 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const typeValue = typeSelect ? typeSelect.value : '';
-            if (typeValue === "buy") {
-                if (buyChecklistModal) buyChecklistModal.style.display = "flex";
-            } else if (typeValue === "sell") {
-                if (sellChecklistModal) sellChecklistModal.style.display = "flex";
-            } else {
-                saveJournal();
-            }
+            openModal(typeValue);
         });
     }
 
-    // 6. 매수 모달 버튼 이벤트
-    if (cancelBuyModalBtn) {
-        cancelBuyModalBtn.addEventListener("click", function () {
-            if (buyChecklistModal) buyChecklistModal.style.display = "none";
+    // 6. 모달 버튼 이벤트
+    if (cancelModalBtn) {
+        cancelModalBtn.addEventListener("click", function () {
+            if (Checklistmodal) Checklistmodal.style.display = "none";
         });
     }
 
-    if (confirmBuySaveBtn) {
-        confirmBuySaveBtn.addEventListener("click", function () {
-            // modalCheckboxes 오타를 buyModalCheckboxes로 수정
-            const allChecked = Array.from(buyModalCheckboxes).every(checkbox => checkbox.checked);
-
-            if (allChecked) {
-                saveJournal();
-            } else {
-                alert("모든 체크리스트 항목을 확인해주세요.");
-            }
-        });
-    }
-
-    // 7. 매도 모달 버튼 이벤트
-    if (cancelSellModalBtn) {
-        cancelSellModalBtn.addEventListener("click", function () {
-            if (sellChecklistModal) sellChecklistModal.style.display = "none";
-        });
-    }
-
-    if (confirmSellSaveBtn) {
-        confirmSellSaveBtn.addEventListener("click", function () {
-            const allChecked = Array.from(sellModalCheckboxes).every(checkbox => checkbox.checked);
-
+    if (confirmSaveBtn) {
+        confirmSaveBtn.addEventListener("click", function () {
+            const modalCheckboxes = modalChecklist.querySelectorAll(".modal-check");
+            const allChecked = Array.from(modalCheckboxes).every(checkbox => checkbox.checked);
             if (allChecked) {
                 saveJournal();
             } else {
