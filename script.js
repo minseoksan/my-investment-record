@@ -4,11 +4,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const journalList = document.querySelector('.journal-list');
     const typeSelect = journalForm ? journalForm.querySelector("select") : null;
 
+    const marketDate = document.getElementById("market-date");
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    if (marketDate) marketDate.textContent = `📅${formattedDate}`;
+
     const Checklistmodal = document.getElementById("checklist-modal");
     const modalTitle = document.getElementById("modal-title");
     const modalChecklist = document.getElementById("modal-checklist");
     const cancelModalBtn = document.getElementById("cancel-modal");
     const confirmSaveBtn = document.getElementById("confirm-save");
+
+    let editingIndex = null; // 수정할 일지의 인덱스를 저장하는 변수
 
     const checklistData = {
     buy: [
@@ -24,10 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
         "매도 이유를 다시 점검"
     ],
     lesson: [
-        "왜 실패했는지 분석했다",
-        "감정적인 매매였는지 확인했다",
-        "다음 대응 전략을 정리했다",
-        "투자 원칙을 수정했다"
+        "배운 점 기록",
+        "다음 대응 전략을 수립",
+        "실패 원인 분석",
+        "감정적인 매매 또는 매수였는지 확인"
     ]
     };
 
@@ -62,11 +69,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 <p>${journal.content}</p>
                 <small class="date">기록일: ${journal.date}</small>
                 <button class="delete-btn">삭제</button>
+                <button class="edit-btn">수정</button>
             `;
 
             const deleteBtn = newCard.querySelector(".delete-btn");
             deleteBtn.addEventListener("click", function () {
                 deleteJournal(index);
+            });
+
+            const editBtn = newCard.querySelector(".edit-btn");
+            editBtn.addEventListener("click", function () {
+                editJournal(index);
             });
 
             journalList.appendChild(newCard);
@@ -96,8 +109,12 @@ document.addEventListener("DOMContentLoaded", function () {
             content: content,
             date: today
         };
-
-        journals.unshift(journal);
+        if (editingIndex === null) {
+            journals.unshift(journal);
+        } else {
+            journals[editingIndex] = journal;
+            editingIndex = null; // 수정 후 인덱스 초기화
+        }
         localStorage.setItem("journals", JSON.stringify(journals));
 
         // 모달 닫기 (독립적 처리)
@@ -120,6 +137,20 @@ document.addEventListener("DOMContentLoaded", function () {
         journals.splice(index, 1);
         localStorage.setItem("journals", JSON.stringify(journals));
         renderJournals();
+    }
+
+    // 5. 일지 수정 함수
+    function editJournal(index) {
+        const titleInput = document.getElementById("titleInput");
+        const contentInput = document.getElementById("contentInput");
+
+        const isEdit = confirm("정말 수정하시겠습니까?");
+        if (!isEdit) return;
+        
+        editingIndex = index;
+        titleInput.value = journals[index].title;
+        contentInput.value = journals[index].content;
+        typeSelect.value = journals[index].type;
     }
 
     // 5. 체크리스트 모달 생성

@@ -42,6 +42,32 @@ header .subtitle {
     margin-bottom: 24px;
 }
 
+/* 우측 상단 시장 현황 카드 */
+.market-card {
+    li {
+        display: flex;
+        justify-content: space-between;
+    }
+    font-size: 0.9rem;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+    margin-bottom: 24px;
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    z-index: 1000;
+}
+
+.market-card h3 {
+    font-size: 1.1rem;
+    color: #1e293b;
+    margin-bottom: 16px;
+}
+
+
 /* 대시보드 요약 상자 */
 .dashboard-summary {
     background-color: #ffffff;
